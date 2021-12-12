@@ -5,6 +5,27 @@ import "./style.css";
 const Home = () => {
   const [url, setUrl] = useState("");
   const [content, setContent] = useState("");
+  const googleColabUrl = "https://colab.research.google.com/drive/15Vvh8AYFG4ncD5OpiHdzM0XIwE2HaDeN#scrollTo=8uZ5OhHVfjug";
+  const [outputImageUrl, setOutputImageUrl] = useState("");
+  const [speed_fpm, setSpeed_fpm] = useState("");
+  const [pulse_react, setPulse_react] = useState("");
+  const [pulse_percussive, setPulse_percussive] = useState(true);
+  const [pulse_harmonic, setPulse_harmonic] = useState(false);
+  const [motion_react, setMotion_react] = useState("");
+  const [motion_percussive, setMotion_percussive] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  function generateImage_and_getImageUrl() {
+    const fetchApi = async () => {
+      const response = await fetch(
+        `${url}/generateImage?speed_fpm=${speed_fpm}&pulse_react=${pulse_react}&pulse_percussive=${pulse_percussive}&pulse_harmonic=${pulse_harmonic}&motion_react=${motion_react}&motion_percussive=${motion_percussive}}`
+      ).then((response) => {
+        setOutputImageUrl(response.url);
+        setIsLoading(false);
+      });
+    };
+    fetchApi();
+  }
 
   return (
     <div class="body-page">
@@ -31,8 +52,12 @@ const Home = () => {
         </div>
         <input
           type="text"
-          onChange={(event) => setUrl(event.target.value)}
-          value={url}
+          onChange={(event) => {
+            setUrl(event.target.value)
+            event.preventDefault();
+            }
+          }
+          value={url}          
         ></input>
 
         <div>
@@ -44,7 +69,6 @@ const Home = () => {
         </div>
         <input
           type="text"
-          onChange={(event) => setUrl(event.target.value)}
           value={url}
         ></input>
 
@@ -61,23 +85,67 @@ const Home = () => {
         </div>
         <div class="parameters">
           <h3 style={{ textAlign: "center" }}>Parâmetros:</h3>
-          <input
-            type="text"
-            onChange={(event) => setUrl(event.target.value)}
-            value={url}
-          ></input>
-          <input
-            type="text"
-            onChange={(event) => setUrl(event.target.value)}
-            value={url}
-          ></input>
-          <input
-            type="text"
-            onChange={(event) => setUrl(event.target.value)}
-            value={url}
-          ></input>
+          <div>
+          <label for="speed_fpm">Speed FPM</label>
+              <input
+                type="text"
+                id = "speed_fpm"
+                onChange={(event) => setSpeed_fpm(event.target.value)}
+                value={url}
+              ></input>
+          </div>
+          <div>
+            <label for="pulse_react">Speed FPM</label>
+            <input
+              type="text"
+              id = "pulse_react"
+              onChange={(event) => setPulse_react(event.target.value)}
+              value={url}
+            ></input>
+          </div>
+          <div>
+            <label for="pulse_percussive">Pulse Percussive</label>
+            <input
+              type="radio"
+              id = "pulse_percussive"
+              onChange={(event) => setPulse_percussive(event.target.value)}
+              value={url}
+            ></input>
+          </div>
+          <div>
+            <label for="pulse_harmonic">Pulse Harmonic</label>
+            <input
+              type="radio"
+              id = "pulse_harmonic"
+              onChange={(event) => setPulse_harmonic(event.target.value)}
+              value={url}
+            ></input>
+          </div>
+          <div>
+            <label for="motion_react">Motion React</label>
+            <input
+              type="text"
+              id = "motion_react"
+              onChange={(event) => setMotion_react(event.target.value)}
+              value={url}
+            ></input>
+          </div>
+          <div>
+            <label for="motion_percussive">Motion Percussive</label>
+            <input
+              type="text"
+              id = "motion_percussive"
+              onChange={(event) => setMotion_percussive(event.target.value)}
+              value={url}
+            ></input>
+          </div>
         </div>
-        <button onClick={() => {}}>Enviar</button>
+        <button onClick={(e) => {
+                  e.preventDefault();
+                  setIsLoading(true);
+                  generateImage_and_getImageUrl()
+                }
+              }>Enviar</button>
       </div>
     </div>
   );
