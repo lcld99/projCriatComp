@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import ReactPlayer from 'react-player'
 import "./style.css";
 
 const Home = () => {
@@ -14,6 +14,7 @@ const Home = () => {
   const [motion_react, setMotion_react] = useState("");
   const [motion_percussive, setMotion_percussive] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
+  const [videoFile, setVideoFile] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   
   /*function generateImage_and_getImageUrl() {
@@ -42,8 +43,10 @@ const Home = () => {
         const response = await fetch(
           `${url}/generate_image/?speed_fpm=${speed_fpm}&pulse_react=${pulse_react}&pulse_percussive=${pulse_percussive}&pulse_harmonic=${pulse_harmonic}&motion_react=${motion_react}&motion_percussive=${motion_percussive}`
         ).then((response) => {
-          console.log(response.url);
-          setOutputImageUrl(response.url);
+          response.text().then(res => {
+            //console.log(res);
+            setVideoFile(res);
+          })
           setIsLoading(false);
         });
       };
@@ -174,6 +177,7 @@ const Home = () => {
                 }
               }>Enviar</button>
       </div>
+      {videoFile ? <video src={`https://drive.google.com/uc?export=download&id=${videoFile}`} type='video/mp4' controls></video> : null}
     </div>
   );
 };
