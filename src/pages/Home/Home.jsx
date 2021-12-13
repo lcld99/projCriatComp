@@ -13,18 +13,44 @@ const Home = () => {
   const [pulse_harmonic, setPulse_harmonic] = useState(false);
   const [motion_react, setMotion_react] = useState("");
   const [motion_percussive, setMotion_percussive] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState();
+  const [isLoading, setIsLoading] = useState(true);
   
-  function generateImage_and_getImageUrl() {
+  /*function generateImage_and_getImageUrl() {
     const fetchApi = async () => {
       const response = await fetch(
-        `${url}/generateImage?speed_fpm=${speed_fpm}&pulse_react=${pulse_react}&pulse_percussive=${pulse_percussive}&pulse_harmonic=${pulse_harmonic}&motion_react=${motion_react}&motion_percussive=${motion_percussive}}`
+        `${url}/generate_image/?speed_fpm=${speed_fpm}&pulse_react=${pulse_react}&pulse_percussive=${pulse_percussive}&pulse_harmonic=${pulse_harmonic}&motion_react=${motion_react}&motion_percussive=${motion_percussive}`
       ).then((response) => {
         setOutputImageUrl(response.url);
         setIsLoading(false);
       });
     };
     fetchApi();
+  }*/
+
+  
+
+  function upload() {
+    const fetchUp = async () => {
+      let form = new FormData();
+      form.append("file", selectedFile);
+      const response = await fetch(`${url}/upload_mp3/`, {
+        method: 'POST',
+        body: form
+      })
+      const fetchApi = async () => {
+        const response = await fetch(
+          `${url}/generate_image/?speed_fpm=${speed_fpm}&pulse_react=${pulse_react}&pulse_percussive=${pulse_percussive}&pulse_harmonic=${pulse_harmonic}&motion_react=${motion_react}&motion_percussive=${motion_percussive}`
+        ).then((response) => {
+          console.log(response.url);
+          setOutputImageUrl(response.url);
+          setIsLoading(false);
+        });
+      };
+      fetchApi();
+    };
+    fetchUp();
+    
   }
 
   return (
@@ -68,8 +94,9 @@ const Home = () => {
           </span>
         </div>
         <input
-          type="text"
-          value={url}
+          type="file"
+          name="file"
+          onChange={(e) => setSelectedFile(e.target.files[0])}
         ></input>
 
         <div>
@@ -91,34 +118,34 @@ const Home = () => {
                 type="text"
                 id = "speed_fpm"
                 onChange={(event) => setSpeed_fpm(event.target.value)}
-                value={url}
+                value={speed_fpm}
               ></input>
           </div>
           <div>
-            <label for="pulse_react">Speed FPM</label>
+            <label for="pulse_react">Pulse React</label>
             <input
               type="text"
               id = "pulse_react"
               onChange={(event) => setPulse_react(event.target.value)}
-              value={url}
+              value={pulse_react}
             ></input>
           </div>
           <div>
             <label for="pulse_percussive">Pulse Percussive</label>
             <input
-              type="radio"
+              type="text"
               id = "pulse_percussive"
               onChange={(event) => setPulse_percussive(event.target.value)}
-              value={url}
+              value={pulse_percussive}
             ></input>
           </div>
           <div>
             <label for="pulse_harmonic">Pulse Harmonic</label>
             <input
-              type="radio"
+              type="text"
               id = "pulse_harmonic"
               onChange={(event) => setPulse_harmonic(event.target.value)}
-              value={url}
+              value={pulse_harmonic}
             ></input>
           </div>
           <div>
@@ -127,7 +154,7 @@ const Home = () => {
               type="text"
               id = "motion_react"
               onChange={(event) => setMotion_react(event.target.value)}
-              value={url}
+              value={motion_react}
             ></input>
           </div>
           <div>
@@ -136,14 +163,14 @@ const Home = () => {
               type="text"
               id = "motion_percussive"
               onChange={(event) => setMotion_percussive(event.target.value)}
-              value={url}
+              value={motion_percussive}
             ></input>
           </div>
         </div>
         <button onClick={(e) => {
                   e.preventDefault();
                   setIsLoading(true);
-                  generateImage_and_getImageUrl()
+                  upload()
                 }
               }>Enviar</button>
       </div>
