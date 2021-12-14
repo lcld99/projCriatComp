@@ -81,8 +81,8 @@ const Home = () => {
           <input
             type="text"
             onChange={(event) => {
-              event.target.value.substring(4)
-              setUrl("https" + event.target.value)
+              let temp = event.target.value.substring(4)
+              setUrl("https" + temp)
               event.preventDefault();
             }
             }
