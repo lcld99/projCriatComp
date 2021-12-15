@@ -20,6 +20,8 @@ const Home = () => {
   const [selectedFile, setSelectedFile] = useState();
   const [videoFile, setVideoFile] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [style, setSelectedStyle] = useState(null);
+  const options = [{ value: 'abstract photos', label: 'abstract photos' }, { value: 'wikiart faces', label: 'wikiart faces' }, { value: 'pokemon', label: 'pokemon' }, { value: 'anime portraits', label: 'anime portraits' }, { value: 'church', label: 'church' }, { value: 'fireworks', label: 'fireworks' }, { value: 'figure drawings', label: 'figure drawings' }, { value: 'my little pony', label: 'my little pony' }, { value: 'abstract art', label: 'abstract art' }, { value: 'ukiyoe faces', label: 'ukiyoe faces' }, { value: 'microscope images', label: 'microscope images' }, { value: 'cat', label: 'cat' }, { value: 'maps', label: 'maps' }, { value: 'panda', label: 'panda' }, { value: 'doors', label: 'doors' }, { value: 'obama', label: 'obama' }, { value: 'butterflies', label: 'butterflies' }, { value: 'grumpy cat', label: 'grumpy cat' }, { value: 'modern art', label: 'modern art' }, { value: 'fursona', label: 'fursona' }, { value: 'floor plans', label: 'floor plans' }, { value: 'ukiyo-e faces', label: 'ukiyo-e faces' }, { value: 'anime faces', label: 'anime faces' }, { value: 'imagenet', label: 'imagenet' }, { value: 'wikiart', label: 'wikiart' }, { value: 'celeba hq faces', label: 'celeba hq faces' }, { value: 'painting faces', label: 'painting faces' }, { value: 'lsun cats', label: 'lsun cats' }, { value: 'wildlife', label: 'wildlife' }]
 
   /*function generateImage_and_getImageUrl() {
     const fetchApi = async () => {
@@ -33,8 +35,6 @@ const Home = () => {
     fetchApi();
   }*/
 
-
-
   function upload() {
     const fetchUp = async () => {
       let form = new FormData();
@@ -45,7 +45,7 @@ const Home = () => {
       })
       const fetchApi = async () => {
         const response = await fetch(
-          `${url}/generate_image/?song=${selectedFile.name}&start=${start}&duration=${duration}&speed_fpm=${speed_fpm}&pulse_react=${pulse_react}&pulse_percussive=${pulse_percussive}&pulse_harmonic=${pulse_harmonic}&motion_react=${motion_react}&motion_percussive=${motion_percussive}`
+          `${url}/generate_image/?song=${selectedFile.name}&style=${style.label}&start=${start}&duration=${duration}&speed_fpm=${speed_fpm}&pulse_react=${pulse_react}&pulse_percussive=${pulse_percussive}&pulse_harmonic=${pulse_harmonic}&motion_react=${motion_react}&motion_percussive=${motion_percussive}`
         ).then((response) => {
           response.text().then(res => {
             //console.log(res);
@@ -119,6 +119,15 @@ const Home = () => {
           <br />
           <div class="parameters">
             <div style={{ border: "1px solid red" }}>
+              <br />
+              <label>Escolha a biblioteca de arte em que o video será gerado:</label>
+              <br />
+              <Select options={options} value={style}
+                onChange={setSelectedStyle} style={{ width: "300px" }} />
+              <br />
+            </div>
+            <br />
+            <div style={{ border: "1px solid red" }}>
               <div>
                 <label for="start" title=" (Default: 0) - Starting timestamp in seconds.">Start Time</label>
                 <input
@@ -129,9 +138,7 @@ const Home = () => {
                 ></input>
               </div>
               <div>
-                <label for="duration" title="Video duration in seconds. If none is passed, full duration of audio
-will be used.
-">Duration</label>
+                <label for="duration" title=" (Default: 2) - Video duration in seconds.">Duration</label>
                 <input
                   type="text"
                   id="duration"
