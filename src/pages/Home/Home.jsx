@@ -1,4 +1,4 @@
-import React, { useState, Component } from "react";
+import React, { useState, Component, useMemo } from "react";
 import ReactPlayer from 'react-player'
 import Select from 'react-select'
 import "./style.css";
@@ -19,8 +19,17 @@ const Home = () => {
   const [motion_harmonic, setMotion_harmonic] = useState(true);
   const [selectedFile, setSelectedFile] = useState();
   const [videoFile, setVideoFile] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const [style, setSelectedStyle] = useState(null);
+  const [isLoading, setIsLoading] = useState();
+  const result = useMemo(() => {
+    if (isLoading) {
+      return <div className="loading-text">Loading...</div>;
+    }else if(!isLoading && videoFile){
+      return <video src={`https://drive.google.com/uc?export=download&id=${videoFile}`} type='video/mp4' controls></video>;
+    }else{
+      return null
+    }
+  }, [isLoading, videoFile]);
   const options = [{ value: 'abstract photos', label: 'abstract photos' }, { value: 'wikiart faces', label: 'wikiart faces' }, { value: 'pokemon', label: 'pokemon' }, { value: 'anime portraits', label: 'anime portraits' }, { value: 'church', label: 'church' }, { value: 'fireworks', label: 'fireworks' }, { value: 'figure drawings', label: 'figure drawings' }, { value: 'my little pony', label: 'my little pony' }, { value: 'abstract art', label: 'abstract art' }, { value: 'ukiyoe faces', label: 'ukiyoe faces' }, { value: 'microscope images', label: 'microscope images' }, { value: 'cat', label: 'cat' }, { value: 'maps', label: 'maps' }, { value: 'panda', label: 'panda' }, { value: 'doors', label: 'doors' }, { value: 'obama', label: 'obama' }, { value: 'butterflies', label: 'butterflies' }, { value: 'grumpy cat', label: 'grumpy cat' }, { value: 'modern art', label: 'modern art' }, { value: 'fursona', label: 'fursona' }, { value: 'floor plans', label: 'floor plans' }, { value: 'ukiyo-e faces', label: 'ukiyo-e faces' }, { value: 'anime faces', label: 'anime faces' }, { value: 'imagenet', label: 'imagenet' }, { value: 'wikiart', label: 'wikiart' }, { value: 'celeba hq faces', label: 'celeba hq faces' }, { value: 'painting faces', label: 'painting faces' }, { value: 'lsun cats', label: 'lsun cats' }, { value: 'wildlife', label: 'wildlife' }]
 
   /*function generateImage_and_getImageUrl() {
@@ -242,10 +251,13 @@ reacts to the audio's harmonic elements">
           <br />
           <br />
         </div>
-        {videoFile ? <video src={`https://drive.google.com/uc?export=download&id=${videoFile}`} type='video/mp4' controls></video> : null}
+        <section className="white-card">
+          {result}
+        </section>
       </div>
     </div>
   );
 };
 
+//{videoFile ? <video src={`https://drive.google.com/uc?export=download&id=${videoFile}`} type='video/mp4' controls></video> : null}
 export default Home;
